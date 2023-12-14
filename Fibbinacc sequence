@@ -1,0 +1,26 @@
+    if n == 0:
+        return 0
+    elif n == 1:
+        return 1
+    else:
+        fib_n_minus_2 = 0
+        fib_n_minus_1 = 1
+        for i in range(n-1):
+            fib_n = fib_n_minus_2 + fib_n_minus_1
+            fib_n_minus_2 = fib_n_minus_1
+            fib_n_minus_1 = fib_n
+            print(" ", fib_n, end="")
+
+print("Iterative Fibonacci sequence: 0 1", end="")
+fib_iter(10)
+
+def fib_rec(n):
+    if n < 2:
+        return n
+    else:
+        return fib_rec(n-1) + fib_rec(n-2)
+
+
+print("\nRecursive Fibonacci sequence: ", end="")
+for i in range(11):
+    print(fib_rec(i), end="  "
