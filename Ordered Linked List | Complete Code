@@ -1,0 +1,123 @@
+class LLnode:
+    def _init_(self):
+        self.data = None
+        self.next = None
+
+list1 = [LLnode() for i in range(6)]
+head = -1
+tail = -1
+free = 0
+
+def init():
+    global head, tail, free
+    free = 0
+    head = -1
+    tail = -1
+    for i in range(6):
+        list1[i].next = i + 1
+    list1[5].next = -1
+
+def insert(value):
+    global head, tail, free
+    if free == -1:
+        print('Overflow, no free nodes')
+    else:
+        newNode = free
+        free = list1[free].next
+        list1[newNode].data = value
+        if head == -1:
+            head = newNode
+            tail = newNode
+            list1[newNode].next = -1
+        elif list1[newNode].data < list1[head].data:
+            list1[newNode].next = head
+            head = newNode
+        elif list1[newNode].data > list1[tail].data:
+            list1[tail].next = newNode
+            tail = newNode
+            list1[newNode].next = -1
+        else:
+            prev = head
+            curr = list1[head].next
+            while list1[curr].data < list1[newNode].data:
+                prev = curr
+                curr = list1[curr].next
+            list1[prev].next = newNode
+            list1[newNode].next = curr
+
+def show():
+    print('head: ', head)
+    print('tail: ', tail)
+    print('free: ', free)
+    print()
+    print('index', '\tdata', '\tnext')
+    for i in range(6):
+        print(i, '\t', list1[i].data, '\t', list1[i].next)
+    print()
+
+def traverse():
+    curr = head
+    while curr != -1:
+        print(list1[curr].data)
+        curr = list1[curr].next
+
+def deleteNode(value):
+    global head, tail, free
+    if head == -1:
+        print('Underflow, list is empty')
+    else:
+        curr = head
+        prev = -1
+        while curr != -1:
+            if list1[curr].data != value:
+                prev = curr
+                curr = list1[curr].next
+            else:
+                if curr == head: # if node to delete is head
+                    head = list1[head].next
+                    list1[curr].next = free
+                    free = curr
+                    return True
+                elif curr == tail: # if node to delete is tail
+                    tail = prev
+                    list1[prev].next = -1
+                    list1[curr].next = free
+                    free = curr
+                    return True
+                else:   # if node to delete is in between head and tail
+                    temp = free
+                    free = curr
+                    list1[prev].next = list1[curr].next
+                    list1[free].next = temp
+                    return True
+    return False
+
+init()
+
+choice = 0
+while choice != 5:
+    print('1. Insert')
+    print('2. Delete')
+    print('3. Traverse')
+    print('4. Show linked list array')
+    print('5. Exit')
+    choice = int(input('Enter choice: '))
+    if choice == 1:
+        arr = ['c', 'h', 'f', 'a', 'd', 'e', 'b']
+        for i in arr:
+            insert(i)
+    elif choice == 2:
+        value = input('Enter value to delete: ')
+        if deleteNode(value):
+            print('Node deleted')
+        else:
+            print('Node not found')
+    elif choice == 3:
+        traverse()
+    elif choice == 4:
+        show()
+    elif choice == 5:
+        print('Exiting...')
+    else:
+        print('Invalid choice')
+    print()
